@@ -1,0 +1,66 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  overflow: hidden;
+  touch-action: none;
+  background: #252525;
+}
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+canvas {
+  width: auto !important;
+  height: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+ /* box-shadow: 0px 0px 40px #000000;*/
+}
+
+/* Full-screen overlay with a dark backdrop */
+#overlay {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100vw; 
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  z-index: 99999; /* Make sure it’s above the canvas */
+}
+
+/* The white box that holds the text */
+#overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background: rgba(0, 0, 0, 0.1);
+  padding: 20px 40px;
+  border-radius: 50px;
+  text-align: center;
+}
+
+#overlay-content p {
+  color: #ffffffe0;                   /* text color */
+  font-family: "Courier New",monospace; /* custom font, or your choice */
+  font-size: 20px;               /* font size */
+  line-height: 1.4;              /* spacing between lines */
+}
+
+/* If you want the entire text box to be semitransparent, 
+   you could do something like:
+   background: rgba(255, 255, 255, 0.8);
+   or color: rgba(50,50,50,0.9); 
+   inside #overlay-content
+*/
