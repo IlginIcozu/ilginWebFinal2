@@ -430,7 +430,7 @@ function mousePressed() {
   } 
   else if (clickCount === 2) {
     // 3) Open the external website in a new tab
-    window.open("https://icozuilgin.myportfolio.com", "_blank");
+    window.open("https://ilginicozu.com", "_blank");
   }
 
   // If you have other logic in your existing mousePressed,
