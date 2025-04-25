@@ -68,11 +68,12 @@ function preload() {
 
 
 function setup() {
+  pixelDensity(pix)
   w = windowWidth
   h = windowHeight
 
   c = createCanvas(w, h, WEBGL)
-  pixelDensity(pix)
+  
   f = createGraphics(w, h)
   f.pixelDensity(pix)
   f.colorMode(HSB, 360, 100, 100, 1)
