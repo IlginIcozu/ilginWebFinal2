@@ -6,9 +6,8 @@ precision highp float;
 const float PHI = 1.61803398874989484820459;
 const float SEED = 43758.0;
 
-// NEW: This factor compensates for pixelDensity=1
-// to make the grain look like pixelDensity=2 did.
-const float GRAIN_SCALE = 2.0; // Increase if you want an even finer grain
+
+const float GRAIN_SCALE = 1.0; 
 
 uniform vec2 resolution;
 uniform sampler2D pg;
@@ -22,23 +21,24 @@ uniform float proD;
 uniform float u_time;
 uniform float u_lineDir;
 
-float random(vec2 st) {
-    return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123) *
-    fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123) * 1.5;
+
+float random(vec2 p) { return fract(1e4 * sin(17.0 * p.x + p.y * 0.1) * (0.1 + abs(sin(p.y * 13.0 + p.x)))); }
+
+float noise(vec2 x) {
+	vec2 i = floor(x);
+	vec2 f = fract(x);
+
+	// Four corners in 2D of a tile
+	float a = random(i);
+	float b = random(i + vec2(1.0, 0.0));
+	float c = random(i + vec2(0.0, 1.0));
+	float d = random(i + vec2(1.0, 1.0));
+
+	vec2 u = f * f * (3.0 - 2.0 * f);
+	return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
-float noise(in vec2 st) {
-    vec2 i = floor(st);
-    vec2 fu = fract(st);
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-    vec2 u = fu * fu * (3.0 - 2.0 * fu);
-    return mix(a, b, u.x)
-         + (c - a) * u.y * (1.0 - u.x)
-         + (d - b) * u.x * u.y;
-}
+
 
 vec3 rgb2hsv(vec3 c) {
   vec4 K = vec4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
@@ -74,13 +74,12 @@ void main() {
   vec2 uv = gl_FragCoord.xy / resolution;
   uv.y = 1.0 - uv.y;
 
-  // Grab some values for offset
-  // CHANGED: multiply uv by GRAIN_SCALE in the random/noise calls
+
   vec2 offset = vec2(texture2D(pg2, uv).r * 10.0 * ak)
                 * vec2(1.0/resolution.x, 1.0/resolution.y)
-                * random(uv * 400.0 * GRAIN_SCALE);  // CHANGED
+                * random(uv * 400.0 * GRAIN_SCALE); 
 
-  vec2 pgCol = vec2(texture2D(pg, uv)) * noise(uv * 40.0 * GRAIN_SCALE); // CHANGED
+  vec2 pgCol = vec2(texture2D(pg, uv)) * noise(uv * 40.0 * GRAIN_SCALE);
 
   // Direction logic
   if(satOn == 1.0) {
@@ -113,14 +112,6 @@ void main() {
   float glitchLine = step(0.98, ldir);
   vec2 glitchLineOffset = vec2(0.0, glitchLine * 0.1);
 
-  // Sample from image
-  // Distortion or vortex logic commented out, but you can re-enable if wanted
-  // vec2 center = vec2(0.5, 0.5);
-  // vec2 toCenter = uv - center;
-  // float dist = length(toCenter);
-  // float distortion = 0.1;
-  // vec2 uvDistorted = uv + toCenter * pow(dist, 2.0) * distortion;
-
   // Base color
   vec3 c = texture2D(img, uv + offset).rgb;
 
@@ -129,14 +120,9 @@ void main() {
   hsv.y *= 1.0005;
   c = hsv2rgb(hsv);
 
-  // Additional layering with random offset
-  // CHANGED: multiply uv by GRAIN_SCALE for these random() calls
   c -= texture2D(img, uv - random(uv / 2.0 * GRAIN_SCALE) - offset).rgb; // CHANGED
   c += texture2D(img, uv + random(uv / 1.0 * GRAIN_SCALE) / offset).rgb; // CHANGED
 
-  // Glitch lines
-  // c /= texture2D(img, uv + glitchLineOffset).rgb;
-  // c *= texture2D(img, uv - glitchLineOffset).rgb;
 
   c = clamp(c, 0.05, 0.9);
 
@@ -148,9 +134,6 @@ void main() {
   float g = texture2D(img, uv - offset).g;
   float b = texture2D(img, uv - offset - vec2(aberrationOffset.x, 0.0)).b;
   vec3 chro = vec3(r, g, b);
-
-  // If you want more visible chromatic shift, un-comment:
-  // c = mix(c, chro, 0.2);
 
   gl_FragColor = vec4(c, 1.0);
 }
