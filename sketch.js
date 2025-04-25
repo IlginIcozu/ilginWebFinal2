@@ -430,7 +430,7 @@ function mousePressed() {
   } 
   else if (clickCount === 2) {
     // 3) Open the external website in a new tab
-    window.open("https://distcs.xyz", "_blank");
+    window.open("https://icozuilgin.myportfolio.com", "_blank");
   }
 
   // If you have other logic in your existing mousePressed,
@@ -492,11 +492,6 @@ function introCanvas() {
 
 function audioSetup() {
 
-  /************************************/
-  /*  TONE.JS AUDIO SETUP (NEW)       */
-  /************************************/
-  // We create the instruments here but do NOT call Tone.start() yet.
-  // That will happen in mousePressed().
   kickOsc = new Tone.Oscillator("B1", "sine").start();
   kickEnv = new Tone.AmplitudeEnvelope({
     attack: 0.001,
