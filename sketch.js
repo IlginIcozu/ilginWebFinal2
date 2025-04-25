@@ -1,6 +1,4 @@
-/************************************/
-/*  GLOBAL VARIABLES (UNCHANGED)    */
-/************************************/
+
 let w;
 let h
 let pix = 1
@@ -28,10 +26,10 @@ let lineDir
 let notes
 let randomNote
 
-let finalFrame; // We'll copy the main canvas output here
-let analysisPG; // We'll run the flicker shader here (1×1 or bigger)
-let prevFrame; // We'll store last frame’s image here
-let flickerSh; // The flicker-detection shader
+let finalFrame;
+let analysisPG; 
+let prevFrame; 
+let flickerSh; 
 
 
 
@@ -54,14 +52,14 @@ let currentFilter = null;
 let brightnessSh;
 let brightnessPG;
 
-let overlayActive = true; // starts true so overlay is drawn initially
-let clickCount = 0; // how many times user has clicked so far
+let overlayActive = true; 
+let clickCount = 0; 
 
 
 function preload() {
   brightnessSh = loadShader('flicker.vert', 'brightness.frag');
   sh = loadShader("pix.vert", "pix.frag");
-  flickerSh = loadShader("flicker.vert", "flicker.frag"); // <-- FLICKER DETECTION
+  flickerSh = loadShader("flicker.vert", "flicker.frag"); 
   seed1 = 999999999 * random(1)
 }
 
@@ -95,9 +93,7 @@ function setup() {
 
   f.rectMode(CENTER)
 
-  // ------------------------------------------------------
-  // FLICKER DETECTION SETUP
-  // ------------------------------------------------------
+
   finalFrame = createGraphics(width, height);
   finalFrame.pixelDensity(1);
 
@@ -115,18 +111,13 @@ function setup() {
 
 
   console.log(seed1)
-  // seed1 = 315812069.4908319
-  // seed1 = 990535095.6915286
-  // 21105553.088910386
-  // 475685616.7732618
-  // 211610999.32637835
   noiseSeed(seed1)
   randomSeed(seed1)
 
 
 
   let frArr = [25, 50, 75, 50, 25, 50, 75, 50, 50, 75]
-  frameMod = 64 //frArr[floor(random(frArr.length))]
+  frameMod = 64 
 
   far = 30
   frameRate(far)
@@ -203,9 +194,7 @@ function draw() {
   img.image(c, w / 2, h / 2)
 
   if (frameCount % frameMod == 0) {
-    // ----------------------------
-    // Existing code for shapes:
-    // ----------------------------
+
     minDim = min(width, height)
 
     sChooser = random([1.0, 2.0, 3.0])
@@ -277,21 +266,14 @@ function draw() {
     blockW = random([width / 2, width / 4, width / 1.3333])
     blockH = random([height / 2, height / 4, height / 1.3333])
 
-    // ----------------------------
-    // NEW: Trigger the Audio Here
-    // ----------------------------
-
-
+ 
     notes = ["D5", "F5", "A5", "D6"];
     randomNote = random(notes);
 
-    // if (Tone.context.state == "running") {
-    //   synthOsc.triggerAttackRelease(randomNote, "32n");
-    // }
+ 
 
     aksak = random([16, 16, 16, 24, 24, 24, 24, 12, 8, 16, 16, 16])
 
-    // s = random([minDim / 10, minDim / 5, minDim / 20, minDim / 10, minDim / 50])
 
     if (s == minDim / 50) {
       kickEnv.decay = 0.01
@@ -365,7 +347,7 @@ function draw() {
 
   quad(-1, -1, 1, -1, 1, 1, -1, 1)
 
-  // frameAnalysis()
+  frameAnalysis()
 
   if (Tone.context.state == "running") {
 
@@ -430,12 +412,11 @@ function mousePressed() {
     }
   } 
   else if (clickCount === 2) {
-    // 3) Open the external website in a new tab
+  
     window.open("https://ilginicozu.com", "_blank");
   }
 
-  // If you have other logic in your existing mousePressed,
-  // you can keep it here or integrate it as needed.
+
 }
 
 function keyPressed() {
@@ -471,16 +452,10 @@ function introCanvas() {
   for (let x = 0; x <= width; x += si) {
     if (random() < 0.8) noStroke()
     for (let y = 0; y <= height; y += si) {
-      // si = random([minDim / 50,minDim / 25,minDim / 100])
-      // if(random() < 0.9) stroke(0,0,0)
+
       f.fill(0, 0, random(30, 65))
       f.rect(x, y, si - x, si - x)
 
-
-      // if (random() < 0.4) f.rect(x + si/2, y, si/2, si/2)
-      // if (random() < 0.4) f.rect(x - si/2, y, si/2, si/2)
-      // if (random() < 0.4) f.rect(x, y - si/2, si/2, si/2)
-      // if (random() < 0.4) f.rect(x, y + si/2, si/2, si/2)
 
     }
   }
@@ -507,17 +482,17 @@ function audioSetup() {
   });
   kickOsc.connect(kickFilter);
   kickFilter.connect(kickEnv);
-  // kickEnv.toDestination();
+
 
   snareOsc = new Tone.NoiseSynth({
     noise: {
-      type: "white", // Type of noise: "white", "pink", or "brown"
+      type: "white", 
     },
     envelope: {
-      attack: 0.005, // Time to reach maximum amplitude
-      decay: 0.01, // Time to fall to sustain level
-      sustain: 0.0, // Sustain amplitude level
-      release: 1.0, // Time to fall to zero after release
+      attack: 0.005,
+      decay: 0.01, 
+      sustain: 0.0, 
+      release: 1.0, 
     },
   })
 
@@ -529,7 +504,7 @@ function audioSetup() {
   });
   snareOsc.volume.value = -9;
   snareOsc.connect(snareFilter);
-  // snareFilter.toDestination();
+
 
 
 
@@ -548,7 +523,7 @@ function audioSetup() {
   percOsc.volume.value = 3;
   percOsc.connect(percFilter);
   percFilter.connect(percEnv);
-  // percEnv.toDestination();
+  
 
 
 
@@ -567,17 +542,17 @@ function audioSetup() {
   percOsc2.volume.value = -4;
   percOsc2.connect(percFilter2);
   percFilter2.connect(percEnv2);
-  // percEnv2.toDestination();
+
 
   noiseOsc = new Tone.NoiseSynth({
     noise: {
-      type: "white", // Type of noise: "white", "pink", or "brown"
+      type: "white", 
     },
     envelope: {
-      attack: 0.0005, // Time to reach maximum amplitude
-      decay: 0.1, // Time to fall to sustain level
-      sustain: 0.0, // Sustain amplitude level
-      release: 1.0, // Time to fall to zero after release
+      attack: 0.0005,
+      decay: 0.1, 
+      sustain: 0.0, 
+      release: 1.0, 
     },
   })
 
@@ -589,9 +564,6 @@ function audioSetup() {
   });
   noiseOsc.volume.value = -22;
   noiseOsc.connect(noiseOscFilter);
-  // noiseOscFilter.toDestination();
-
-
 
 
   synthOsc = new Tone.DuoSynth({
@@ -600,10 +572,10 @@ function audioSetup() {
         type: "sine",
       },
       envelope: {
-        attack: 0.005, // Time for amplitude to rise to maximum level
-        decay: 0.0005, // Time for amplitude to fall to sustain level
-        sustain: 0.0, // Sustain level (0-1)
-        release: 1.5, // Time for amplitude to fall to 0 after note off
+        attack: 0.005, 
+        decay: 0.0005, 
+        sustain: 0.0, 
+        release: 1.5, 
       },
     },
     voice1: {
@@ -611,7 +583,7 @@ function audioSetup() {
         type: "triangle",
       },
       envelope: {
-        attack: 0.001, // Faster attack for this voice
+        attack: 0.001, 
         decay: 0.001,
         sustain: 0.0,
         release: 1.0,
@@ -621,14 +593,14 @@ function audioSetup() {
 
 
   synthFilter = new Tone.AutoFilter({
-    frequency: "8n", // LFO frequency in Hz (1 cycle per second)
-    depth: 1.0, // How much the filter frequency is modulated
-    baseFrequency: 100, // Starting frequency of the filter
-    octaves: 4, // Modulation range in octaves
+    frequency: "8n", 
+    depth: 1.0, 
+    baseFrequency: 100, 
+    octaves: 4, 
     filter: {
       type: "lowpass",
-      rolloff: -24, // Steeper rolloff for better clarity
-      Q: 1, // Resonance of the filter
+      rolloff: -24, 
+      Q: 1, 
     },
   }).start()
   synthOsc.volume.value = -18;
@@ -636,29 +608,26 @@ function audioSetup() {
   synthFilter.type = "sine";
 
   pitchShifter = new Tone.PitchShift({
-    pitch: 24, // Shift pitch up by 4 semitones
-    windowSize: 0.5, // Size of the pitch-shifting window
-    delayTime: 0.01, // Delay before processing (short for real-time shifting)
-    feedback: 0.01, // Amount of feedback (for subtle effects)
+    pitch: 24, 
+    windowSize: 0.5, 
+    delayTime: 0.01, 
+    feedback: 0.01, 
   });
 
   synthOsc.connect(synthFilter)
-  // synthFilter.toDestination()
-
-  // pitchShifter.connect(synthFilter)
 
 
-  // // Add a Reverb
+
   const reverb = new Tone.Reverb({
-    decay: 2, // Decay time in seconds
-    preDelay: 0.01, // Pre-delay in seconds
-    wet: 0.5, // Wet/dry mix
+    decay: 2, 
+    preDelay: 0.01, 
+    wet: 0.5, 
   });
 
-  // synthOsc.connect(reverb);
+ 
 
   synthFilter.connect(reverb)
-  // synthFilter.toDestination()
+ 
   reverb.toDestination()
 
 
@@ -677,7 +646,7 @@ function audioSetup() {
 
   masterGain = new Tone.Gain().toDestination();
 
-  // Connect all sound sources to masterGain
+
   kickEnv.connect(masterGain);
   snareFilter.connect(masterGain); // Snare's final filter
   percEnv.connect(masterGain); // Percussion 1
@@ -693,8 +662,8 @@ function frameAnalysis() {
   finalFrame.clear();
 
   finalFrame.drawingContext.drawImage(
-    c.elt, // source: our main canvas
-    0, 0, width, height // destination coords & size
+    c.elt, 
+    0, 0, width, height 
   );
   finalFrame.pop();
 
@@ -711,10 +680,10 @@ function frameAnalysis() {
   analysisPG.quad(-1, -1, 1, -1, 1, 1, -1, 1);
   analysisPG.pop();
 
-  analysisPG.loadPixels(); // [r,g,b,a] in analysisPG.pixels
-  let r = analysisPG.pixels[0]; // 0..255
+  analysisPG.loadPixels(); 
+  let r = analysisPG.pixels[0]; 
   if (r > 80) {
-    // It's white => big difference => flicker
+
     console.log("Flicker detected!");
     flick = true
     if (Tone.context.state == "running") {
@@ -728,29 +697,28 @@ function frameAnalysis() {
     flick = false
   }
 
-  // 2) Use brightnessSh in brightnessPG
+
   brightnessPG.push();
   brightnessPG.clear();
   brightnessPG.shader(brightnessSh);
 
-  // Pass the finalFrame as "u_frame"
+
   brightnessSh.setUniform('u_frame', finalFrame);
   brightnessSh.setUniform('u_resolution', [width, height]);
 
   brightnessPG.quad(-1, -1, 1, -1, 1, 1, -1, 1);
   brightnessPG.pop();
 
-  // 3) Read the 32×32 brightness
   brightnessPG.loadPixels();
   let pix = brightnessPG.pixels;
   let sumBright = 0;
-  let numPixels = 32 * 32; // same as brightnessPG.width*brightnessPG.height
+  let numPixels = 32 * 32; 
 
   for (let i = 0; i < pix.length; i += 4) {
-    let val = pix[i]; // 0..255
+    let val = pix[i];
     sumBright += val;
   }
-  let avgBright = sumBright / numPixels; // in 0..255
+  let avgBright = sumBright / numPixels;
 
   if (avgBright > 190) {
     console.log("Mostly White Canvas");
@@ -765,7 +733,7 @@ function frameAnalysis() {
   } else if (avgBright < 30) {
     console.log("Mostly Black Canvas");
     if (currentFilter !== lowpf) {
-      // Switch to LPF
+
       if (Tone.context.state == "running") {
         masterGain.disconnect();
         masterGain.connect(lowpf);
@@ -774,7 +742,7 @@ function frameAnalysis() {
     }
   } else {
     if (currentFilter !== null) {
-      // Remove any filtering
+
       if (Tone.context.state == "running") {
         masterGain.disconnect();
         masterGain.toDestination();
@@ -783,7 +751,7 @@ function frameAnalysis() {
     }
   }
 
-  // 5) Update prevFrame (which is 2D) with the main canvas
+
   prevFrame.push();
   prevFrame.image(c, 0, 0, width, height);
   prevFrame.pop();
@@ -794,7 +762,7 @@ function initSetup() {
 
   minDim = min(width, height)
 
-  sChooser = random([1.0, 2.0, 3.0, 1.0]) ///////////////rectangle sizes
+  sChooser = random([1.0, 2.0, 3.0, 1.0]) 
   if (sChooser == 1.0) {
     s = minDim / 10
   } else if (sChooser == 2.0) {
@@ -803,7 +771,7 @@ function initSetup() {
     s = minDim / 20
   }
 
-  ellipseChooser = random([0.0, 0.0, 1.0, 0.0, 0.0]) /////ellipse 
+  ellipseChooser = random([0.0, 0.0, 1.0, 0.0, 0.0]) 
   ellipseChooser = 0
 
   if (frameMod == 25) {
@@ -812,7 +780,7 @@ function initSetup() {
     akChooser = random([1, 2, 3, 4, 1, 2])
   }
 
-  dirChooser = random([1.0, 2.0, 3.0, 3.0]) ///direction chooser
+  dirChooser = random([1.0, 2.0, 3.0, 3.0])
 
   let dX = random([1., -1., 0.0, 0.0])
   let dY
@@ -834,13 +802,13 @@ function initSetup() {
   sh.setUniform('u_lineDir', lineDir)
 
   if (dirChooser == 1.0) {
-    sh.setUniform('dirX', dX) ///sadece dikeyYatay
+    sh.setUniform('dirX', dX) 
     sh.setUniform('dirY', dY)
   } else if (dirChooser == 2.0) {
-    sh.setUniform('dirX', random([-1., 1.])) ///sadece kose
+    sh.setUniform('dirX', random([-1., 1.])) 
     sh.setUniform('dirY', random([-1., 1.]))
   } else if (dirChooser == 3.0) {
-    sh.setUniform('dirX', random([-1., 1., 0., 0., 0.])) ////hepsi
+    sh.setUniform('dirX', random([-1., 1., 0., 0., 0.])) 
     sh.setUniform('dirY', random([-1., 1., 0., 0., 0.]))
   }
 
